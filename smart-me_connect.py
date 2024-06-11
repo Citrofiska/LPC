@@ -6,11 +6,11 @@ if __name__ == "__main__":
 
 	# Smart-me API
 	url = "https://api.smart-me.com/api/Devices/"
-	username = "xuwa@kth.se" # your username at smart-me
-	password = "KTHpsw4XW" # your password at smart-me
+	username = "" # your username at smart-me
+	password = "" # your password at smart-me
 
 	# OSC protocol
-	ip_local_osc = "130.229.191.63" # your IP address of the local device  # 172.20.10.11  130.229.191.63
+	ip_local_osc = "" # your IP address of the local device  # 172.20.10.11  130.229.191.63
 	port_osc = 5011 # osc port where the data will be sent
 	client = udp_client.SimpleUDPClient(ip_local_osc, port_osc)
 	old_time = time.time()
