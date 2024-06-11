@@ -46,7 +46,7 @@ def main(modulator_file, carrier_file, output_file):
     wav.write(output_file, rate_mod, synthesized_signal.astype(np.int16))
 
 if __name__ == "__main__":
-    modulator_file = "modulator.wav"
-    carrier_file = "carrier.wav"
-    output_file = "synthesized.wav"
+    modulator_file = "data/lpc_data/tpt.wav"
+    carrier_file = "data/lpc_data/vn.wav"
+    output_file = "data/lpc_data/synthesized.wav"
     main(modulator_file, carrier_file, output_file)
