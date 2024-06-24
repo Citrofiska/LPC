@@ -1,5 +1,6 @@
 import requests
 import time
+import csv
 from pythonosc import udp_client
 
 if __name__ == "__main__":
@@ -10,10 +11,9 @@ if __name__ == "__main__":
 	password = "" # your password at smart-me
 
 	# OSC protocol
-	ip_local_osc = "" # your IP address of the local device  # 172.20.10.11  130.229.191.63
+	ip_local_osc = "" # your IP address of the local device(laptop)
 	port_osc = 5011 # osc port where the data will be sent
 	client = udp_client.SimpleUDPClient(ip_local_osc, port_osc)
-	old_time = time.time()
 
 	print('Sending data through OSC protocol')
 	print('-'*30)
@@ -21,8 +21,13 @@ if __name__ == "__main__":
 	Current_list = []
 	ActivePower_list = []
 	Energy_list = []
+	old_time = time.time()
+	diff = 1
+	old_energy = 0
+	thres = 10e-5
+	iter = 0
 
-	while True:
+	while diff>thres:
 
 		response = requests.get(url, auth=(username, password))
 		devices = response.json()
@@ -42,15 +47,28 @@ if __name__ == "__main__":
 
 		print(f"receiving new data from smart-me at {old_time}")
 
-		print("/smart-me/Voltage", Voltage)
-		print("/smart-me/Current", Current)
-		print("/smart-me/Power", ActivePower)
-		print("/smart-me/Energy", energy)
+		# print("/smart-me/Voltage", Voltage)
+		# print("/smart-me/Current", Current)
+		# print("/smart-me/Power", ActivePower)
+		# print("/smart-me/Energy", energy)
+		print(f"saving new data from smart-me at {old_time}")
 
-		# save data in lists
 		Voltage_list.append(Voltage)
 		Current_list.append(Current)
 		ActivePower_list.append(ActivePower)
 		Energy_list.append(energy)
 
-		time.sleep(1)
+		diff = energy - old_energy
+		old_energy = energy
+		iter += 1
+		print(f"Energy diff is {diff} at {iter} counting")
+
+		time.sleep(30)
+
+	# write energy list to csv
+	with open('output_energy.csv', 'w', newline='') as file:
+		writer = csv.writer(file)
+		for item in Energy_list:
+			writer.writerow([item])
+
+# Xu edit on 6/21
